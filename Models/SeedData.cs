@@ -1,7 +1,4 @@
-using System;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace PagingSortingDemo.Models
 {
@@ -9,11 +6,19 @@ namespace PagingSortingDemo.Models
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            using (var context = new ProfessorContext(serviceProvider.GetRequiredService<DbContextOptions<ProfessorContext>>()))
+            using (var context = new ProfessorContext(
+                serviceProvider.GetRequiredService<
+                    DbContextOptions<ProfessorContext>>()))
             {
+                if (context == null || context.Professor == null)
+                {
+                    throw new ArgumentNullException("Null ProfessorContext");
+                }
+
+                // Look for any professor.
                 if (context.Professor.Any())
                 {
-                    return;
+                    return;   // DB has been seeded
                 }
 
                 context.Professor.AddRange(

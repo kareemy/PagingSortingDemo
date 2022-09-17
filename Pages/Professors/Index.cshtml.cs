@@ -19,7 +19,7 @@ namespace PagingSortingDemo.Pages.Professors
             _context = context;
         }
 
-        public IList<Professor> Professor { get;set; }
+        public IList<Professor> Professor { get;set; } = default!;
 
         // Paging support
         // PageNum is the current page number we are on
@@ -34,38 +34,41 @@ namespace PagingSortingDemo.Pages.Professors
 
         // Sorting support
         [BindProperty(SupportsGet = true)]
-        public string CurrentSort {get; set;}
+        public string CurrentSort {get; set;} = string.Empty;
         // Second sorting technique with a SelectList
-        public SelectList SortList {get; set;}
+        public SelectList SortList {get; set;} = default!;
 
         public async Task OnGetAsync()
         {
-            //Professor = await _context.Professor.ToListAsync();
-            // Sorting support
-            // Break up query. Do basic query first that just selects all professors
-            var query = _context.Professor.Select(p => p);
-            List<SelectListItem> sortItems = new List<SelectListItem> {
-                new SelectListItem { Text = "FirstName Ascending", Value = "first_asc" },
-                new SelectListItem { Text = "FirstName Descending", Value = "first_desc"}
-            };
-            SortList = new SelectList(sortItems, "Value", "Text", CurrentSort);
-
-            switch (CurrentSort)
+            if (_context.Professor != null)
             {
-                // If user selected "first_asc", modify query to sort by first name ascending order
-                case "first_asc": 
-                    query = query.OrderBy(p => p.FirstName);
-                    break;
-                // If user selected "first_desc", modify query to sort by first name descending
-                case "first_desc":
-                    query = query.OrderByDescending(p => p.FirstName);
-                    break;
-                // Add more sorting cases as needed
-            }
+                //Professor = await _context.Professor.ToListAsync();
+                // Sorting support
+                // Break up query. Do basic query first that just selects all professors
+                var query = _context.Professor.Select(p => p);
+                List<SelectListItem> sortItems = new List<SelectListItem> {
+                    new SelectListItem { Text = "FirstName Ascending", Value = "first_asc" },
+                    new SelectListItem { Text = "FirstName Descending", Value = "first_desc"}
+                };
+                SortList = new SelectList(sortItems, "Value", "Text", CurrentSort);
 
-            // Retrieve just the professors for the page we are on
-            // Use .Skip() and .Take() to select them
-            Professor = await query.Skip((PageNum-1)*PageSize).Take(PageSize).ToListAsync();
+                switch (CurrentSort)
+                {
+                    // If user selected "first_asc", modify query to sort by first name ascending order
+                    case "first_asc": 
+                        query = query.OrderBy(p => p.FirstName);
+                        break;
+                    // If user selected "first_desc", modify query to sort by first name descending
+                    case "first_desc":
+                        query = query.OrderByDescending(p => p.FirstName);
+                        break;
+                    // Add more sorting cases as needed
+                }
+
+                // Retrieve just the professors for the page we are on
+                // Use .Skip() and .Take() to select them
+                Professor = await query.Skip((PageNum-1)*PageSize).Take(PageSize).ToListAsync();
+            }
         }
     }
 }

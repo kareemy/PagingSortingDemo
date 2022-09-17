@@ -19,35 +19,39 @@ namespace PagingSortingDemo.Pages.Professors
         }
 
         [BindProperty]
-        public Professor Professor { get; set; }
+      public Professor Professor { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Professor == null)
             {
                 return NotFound();
             }
 
-            Professor = await _context.Professor.FirstOrDefaultAsync(m => m.ID == id);
+            var professor = await _context.Professor.FirstOrDefaultAsync(m => m.ID == id);
 
-            if (Professor == null)
+            if (professor == null)
             {
                 return NotFound();
+            }
+            else 
+            {
+                Professor = professor;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Professor == null)
             {
                 return NotFound();
             }
+            var professor = await _context.Professor.FindAsync(id);
 
-            Professor = await _context.Professor.FindAsync(id);
-
-            if (Professor != null)
+            if (professor != null)
             {
+                Professor = professor;
                 _context.Professor.Remove(Professor);
                 await _context.SaveChangesAsync();
             }

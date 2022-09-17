@@ -20,26 +20,26 @@ namespace PagingSortingDemo.Pages.Professors
         }
 
         [BindProperty]
-        public Professor Professor { get; set; }
+        public Professor Professor { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Professor == null)
             {
                 return NotFound();
             }
 
-            Professor = await _context.Professor.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (Professor == null)
+            var professor =  await _context.Professor.FirstOrDefaultAsync(m => m.ID == id);
+            if (professor == null)
             {
                 return NotFound();
             }
+            Professor = professor;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://aka.ms/RazorPagesCRUD.
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -70,7 +70,7 @@ namespace PagingSortingDemo.Pages.Professors
 
         private bool ProfessorExists(int id)
         {
-            return _context.Professor.Any(e => e.ID == id);
+          return _context.Professor.Any(e => e.ID == id);
         }
     }
 }

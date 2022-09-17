@@ -20,7 +20,7 @@
 
 <table class="table">
     <thead>
-        <tr>            
+        <tr>
             <th>
                 @{
                     // Alternate sort order
@@ -30,7 +30,7 @@
                         firstSort = "first_desc";
                     }
                 }
-                <!-- Note: This will forget the current pagenum! -->
+                <!-- FIXME: This will forget the current pagenum! -->
                 <a asp-page="./Index" asp-route-CurrentSort="@firstSort">@Html.DisplayNameFor(model => model.Professor[0].FirstName)</a>
             </th>
             <th>
@@ -67,11 +67,10 @@
         prevDisabled = "disabled";
     }
 }
-<!-- Pagination -->
 <nav aria-label="Page navigation example">
-  <ul class="pagination">
-    <!-- FIXME: These buttons will forget your current sort order! -->
-    <li class="page-item @prevDisabled"><a class="page-link" asp-page="./Index" asp-route-PageNum="@(Model.PageNum - 1)">Previous</a></li>
-    <li class="page-item"><a class="page-link" asp-page="./Index" asp-route-PageNum="@(Model.PageNum + 1)">Next</a></li>
-  </ul>
+    <ul class="pagination">
+        <!-- FIXME: These buttons will forget your current sort order! -->
+        <li class="page-item @prevDisabled"><a class="page-link" asp-page="./Index" asp-route-PageNum="@(Model.PageNum - 1)">Previous</a></li>
+        <li class="page-item"><a class="page-link" asp-page="./Index" asp-route-PageNum="@(Model.PageNum + 1)">Next</a></li>
+    </ul>
 </nav>

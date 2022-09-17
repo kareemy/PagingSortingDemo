@@ -9,6 +9,6 @@ namespace PagingSortingDemo.Models
         {
         }
 
-        public DbSet<Professor> Professor {get; set;}
+        public DbSet<Professor> Professor {get; set;} = default!;
     }
 }

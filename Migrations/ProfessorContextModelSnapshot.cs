@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PagingSortingDemo.Models;
 
+#nullable disable
+
 namespace PagingSortingDemo.Migrations
 {
     [DbContext(typeof(ProfessorContext))]
@@ -12,8 +14,7 @@ namespace PagingSortingDemo.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
 
             modelBuilder.Entity("PagingSortingDemo.Models.Professor", b =>
                 {
@@ -22,9 +23,11 @@ namespace PagingSortingDemo.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
